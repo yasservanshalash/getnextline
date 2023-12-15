@@ -6,9 +6,10 @@
 /*   By: yasser <marvin@42.fr>                        +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/23 15:18:07 by yasser        #+#    #+#                 */
-/*   Updated: 2023/12/15 12:13:59 by yshalash      ########   odam.nl         */
+/*   Updated: 2023/12/15 13:24:06 by yshalash      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -74,14 +75,21 @@ void	*ft_memalloc(size_t size)
 	return (mem);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	size_t	i;
 
-	i = -1;
-	while (++i < n)
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-	return (dst);
+	i = 0;
+	if (!(dest || src) || n == 0)
+	{
+		return (dest);
+	}
+	while (i < n)
+	{
+		((char *)dest)[i] = ((char *)src)[i];
+		i++;
+	}
+	return (dest);
 }
 
 void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)
@@ -100,7 +108,7 @@ void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)
 		min_size = prev_size;
 	else 
 		min_size = new_size;
-	ft_memcpy(new, ptr, min_size);
+	ft_memcpy(new, ptr, min_size - BUFFER_SIZE);
 	free(ptr);
 	return (new);
 }
