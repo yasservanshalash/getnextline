@@ -6,13 +6,15 @@
 /*   By: yasser <marvin@42.fr>                        +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/23 15:18:07 by yasser        #+#    #+#                 */
-/*   Updated: 2023/12/14 14:28:16 by yshalash      ########   odam.nl         */
+/*   Updated: 2023/12/15 12:13:59 by yshalash      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
+
 char	*ft_strdup(const char *src)
 {
 	char	*dst;
@@ -61,35 +63,44 @@ void	ft_bzero(void *s, size_t n)
 		i++;
 	}
 }
-void *malloc_size(void *ptr) {
-    if (ptr == NULL) {
-        return NULL; // corrected return type
-    }
 
-    size_t header_size = sizeof(size_t);
-    size_t usable_size = *(size_t *)ptr - header_size;
+void	*ft_memalloc(size_t size)
+{
+	void	*mem;
 
-    return (void *)usable_size;
+	if (!(mem = malloc(size)))
+		return (NULL);
+	ft_bzero(mem, size);
+	return (mem);
 }
 
-void *ft_realloc(void *ptr, size_t new_size) {
-    if (ptr == NULL) {
-        return NULL;
-    }
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	size_t	i;
 
-    size_t original_size = (size_t)malloc_size(ptr);
+	i = -1;
+	while (++i < n)
+		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+	return (dst);
+}
 
-    if (new_size > original_size) {
-        void *new_ptr = malloc(new_size);
-        if (new_ptr == NULL) {
-            // Handle malloc failure
-            return NULL;
-        }
-        memcpy(new_ptr, ptr, original_size);
-        free(ptr);
-        return new_ptr;
-    }
+void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)
+{
+	void	*new;
+	size_t min_size;
 
-    // If new_size is less than or equal to original_size, return the original pointer
-    return ptr;
+	if (!ptr)
+		return (NULL);
+	if (!(new = ft_memalloc(new_size)))
+	{
+		free(ptr);
+		return (NULL);
+	}
+	if (prev_size < new_size)
+		min_size = prev_size;
+	else 
+		min_size = new_size;
+	ft_memcpy(new, ptr, min_size);
+	free(ptr);
+	return (new);
 }

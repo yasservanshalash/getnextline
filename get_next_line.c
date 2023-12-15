@@ -11,7 +11,7 @@
 # define BUFFER_SIZE 1000000
 #endif
 
-static void	leftover_logic(char **line, char **leftover, int *i, int *j)
+void	leftover_logic(char **line, char **leftover, int *i, int *j)
 {
 	char	*temp;
 
@@ -37,7 +37,7 @@ static void	leftover_logic(char **line, char **leftover, int *i, int *j)
 	}
 }
 
-static char	*leftover_in_line_logic(char **leftover, char **line, int *j)
+char	*leftover_in_line_logic(char **leftover, char **line, int *j)
 {
 	*leftover = ft_strdup(*line + *j + 1);
 	if (*leftover == NULL)
@@ -50,7 +50,7 @@ static char	*leftover_in_line_logic(char **leftover, char **line, int *j)
 	return (*leftover);
 }
 
-static char	*line_logic(int fd, char **line, int *i, int *j)
+char	*line_logic(int fd, char **line, int *i, int *j)
 {
 	int		read_chars;
 	char	*leftover;
@@ -65,10 +65,11 @@ static char	*line_logic(int fd, char **line, int *i, int *j)
 			while (*j < *i && (*line)[*j] != '\n')
 				(*j)++;
 			if (*j < *i)
+			{
 				return (leftover_in_line_logic(&leftover, line, j));
+			}
 		}
-		*line = ft_realloc(*line, (*i + BUFFER_SIZE + 1) * sizeof(char));
-		if (*line == NULL)
+		*line = ft_realloc(*line, *i + BUFFER_SIZE + 1, (*i + BUFFER_SIZE + 1) * sizeof(char));		if (*line == NULL)
 			return (NULL);
 		ft_bzero(*line + *i, BUFFER_SIZE + 1);
 		read_chars = read(fd, *line + *i, BUFFER_SIZE);
@@ -104,20 +105,20 @@ char	*get_next_line(int fd)
 	}
 }
 
-// int main(void) {
-//     int fd;
-//     fd = open("text.txt", O_RDONLY);
-//     if (fd < 0) {
-//         perror("Error opening file");
-//         return (1);
-//     }
+int main(void) {
+    int fd;
+    fd = open("text.txt", O_RDONLY);
+    if (fd < 0) {
+        perror("Error opening file");
+        return (1);
+    }
 
-//     char *result;
-//     while ((result = get_next_line(fd)) != NULL) {
-//         printf("%s", result);
-//         free(result);  // Free each line obtained from get_next_line
-//     }
+    char *result;
+    while ((result = get_next_line(fd)) != NULL) {
+        printf("%s", result);
+        free(result);  // Free each line obtained from get_next_line
+    }
 
-//     close(fd);
-//     return (0);
-// }
+    close(fd);
+    return (0);
+}
