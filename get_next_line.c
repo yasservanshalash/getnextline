@@ -69,7 +69,8 @@ char	*line_logic(int fd, char **line, int *i, int *j)
 				return (leftover_in_line_logic(&leftover, line, j));
 			}
 		}
-		*line = ft_realloc(*line, *i + BUFFER_SIZE + 1, (*i + BUFFER_SIZE + 1) * sizeof(char));		if (*line == NULL)
+		*line = ft_realloc(*line, *i + BUFFER_SIZE + 1, (*i + BUFFER_SIZE + 1) * sizeof(char));
+		if (*line == NULL)
 			return (NULL);
 		ft_bzero(*line + *i, BUFFER_SIZE + 1);
 		read_chars = read(fd, *line + *i, BUFFER_SIZE);
